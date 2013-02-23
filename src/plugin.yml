@@ -1,0 +1,5 @@
+name: Tracker
+main: com.github.mineGeek.Tracker.Tracker
+version: 1.0.0
+commands:       
+    
