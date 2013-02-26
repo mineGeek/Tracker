@@ -197,7 +197,10 @@ public class Area {
 
 		
 		if ( l.getWorld().getName().equals( ne.getWorld().getName() ) ) {
-			if ( ( Math.max( ne.getX(), sw.getX() ) < l.getX() ) || ( Math.min( ne.getX(), sw.getX() ) > l.getX() ) ) return false;
+			if ( ( Math.max( ne.getX(), sw.getX() ) < l.getX() ) || ( Math.min( ne.getX(), sw.getX() ) > l.getX() ) ) {
+				Bukkit.getLogger().info( "Fail: x (" + l.getX() + ") against max: " + Math.max( ne.getX(), sw.getX() ) + " min: " + Math.min( ne.getX(), sw.getX() ) );
+				return false;
+			}
 			if ( ( Math.max( ne.getZ(), sw.getZ() ) < l.getZ() ) || ( Math.min( ne.getZ(), sw.getZ() ) > l.getZ() ) ) return false;
 			if ( ( Math.max( ne.getY(), sw.getY() ) < l.getY() ) || ( Math.min( ne.getY(), sw.getY() ) > l.getY() ) ) return false;	
 			return true;

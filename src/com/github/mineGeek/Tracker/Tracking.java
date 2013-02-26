@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -15,26 +16,36 @@ public class Tracking {
 	private static Map<Integer, Track> chunks = new HashMap<Integer,Track>();
 	
 	public static void clear() {chunks.clear(); }
+	
 	public static void add( int chunkSig, Track track ) {
+		//Map<Integer, Track> test = chunks;
+		//Bukkit.getLogger().info( "hash: "+ chunkSig);
 		chunks.put( chunkSig, track );
-		Map<Integer, Track> test = chunks;				
+		
+		boolean t = true;
 	}
 	
 	public static void playerMove( Player p ) {
-		Map<Integer, Track> test = chunks; int c = p.getLocation().getChunk().hashCode();
-		if ( chunks.containsKey( p.getLocation().getChunk().hashCode() ) ) {
+		playerMove( p, p.getLocation() );
+	}
+	
+	public static void playerMove( Player p, Location to ) {
+		//Map<Integer, Track> test = chunks; int c = p.getLocation().getChunk().hashCode();
+		//Bukkit.getLogger().info( "in:"+ c);
+		if ( chunks.containsKey( to.getChunk().hashCode() ) ) {
 			
-			chunks.get( p.getLocation().getChunk().hashCode() ).run( p );
+			chunks.get( to.getChunk().hashCode() ).run( p );
 		}
 		
 	}
 	
 	public static void add( Track track ) {
 		
-		List<Chunk> chunks = getChunksFromArea( track.area.ne(), track.area.sw() );
+		chunks.clear();
+		List<Chunk> chunkList = getChunksFromArea( track.area.ne(), track.area.sw() );
 		
-		if ( !chunks.isEmpty() ) {
-			for ( Chunk c : chunks ) {
+		if ( !chunkList.isEmpty() ) {
+			for ( Chunk c : chunkList ) {
 				add( c.hashCode(), track );
 			}
 		}
@@ -47,11 +58,11 @@ public class Tracking {
 		
 		List<Chunk> list = new ArrayList<Chunk>();
 		
-		int fromX = ( (int)ne.getX()/16) -1 ;
-		int toX = ( (int)sw.getX()/16) + 1;
+		int fromX = (int)Math.floor( Math.min( ne.getChunk().getX(), sw.getChunk().getX() ) );
+		int toX =   (int)Math.ceil( Math.max( ne.getChunk().getX(), sw.getChunk().getX() ) );
 		
-		int fromZ = ( (int)ne.getZ()/16) - 1;
-		int toZ = ( (int)sw.getZ()/16) + 1;
+		int fromZ = (int)Math.floor( Math.min( ne.getChunk().getZ(), sw.getChunk().getZ() ) );
+		int toZ = (int)Math.ceil( Math.max( ne.getChunk().getZ(), sw.getChunk().getZ() ) );
 		
 		for( int x = fromX; x <= toX; x++ ) {
 			

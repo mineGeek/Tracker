@@ -24,14 +24,16 @@ public class Track {
 		
 		if ( area == null ) return;
 		
-		if ( area.intersectsWith( p.getLocation() ) && !in.containsKey( p.getName() ) ) {
+		boolean intersect = area.intersectsWith( p.getLocation() );
+		
+		if ( intersect && !in.containsKey( p.getName() ) ) {
+			p.sendMessage("in");
+			in.put( p.getName() , true );
+			onEnter( p );
+		} else if ( !intersect && in.containsKey( p.getName() ) ) {
 			p.sendMessage("out");
 			in.remove( p.getName() );
 			onExit( p );
-		} else if ( !in.containsKey( p.getName() ) ) {
-			p.sendMessage("out");
-			in.put( p.getName() , true );
-			onEnter( p );
 		}
 		
 	}
